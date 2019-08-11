@@ -24,3 +24,4 @@ C:\dataOnC\Projects\NppArduinoCLI\src\NppArduinoCLI\obj\x64\Debug\NppArduinoCLI.
 C:\dataOnC\Projects\NppArduinoCLI\src\NppArduinoCLI\obj\x64\Debug\NppArduinoCLI.csproj.CoreCompileInputs.cache
 C:\dataOnC\Projects\NppArduinoCLI\src\NppArduinoCLI\obj\x64\Debug\NppArduinoCLI.dll
 C:\dataOnC\Projects\NppArduinoCLI\src\NppArduinoCLI\obj\x64\Debug\NppArduinoCLI.pdb
+C:\dataOnC\Projects\NppArduinoCLI\src\NppArduinoCLI\obj\x64\Debug\NppArduinoCLI.csprojAssemblyReference.cache

@@ -13,7 +13,7 @@ namespace Kbg.NppPluginNET
         public List<Board> Boards { get; set; }
         public List<Port> Ports { get; set; }
     }
-
+    
     public class Board
     {
         public string name { get; set; }
@@ -26,10 +26,8 @@ namespace Kbg.NppPluginNET
         public string address { get; set; }
         public string protocol { get; set; }
         public string protocol_label { get; set; }
-        public Board boards { get; set; }
-
+        public List<Board> boards { get; set; }
     }
-
 
 
     public partial class frmMyDlg : Form
@@ -47,7 +45,7 @@ namespace Kbg.NppPluginNET
             // get the connected board list
             GetConnectedBoardsList();
             // set the board list in cimbo box
-            //SetConnecteBoardsComboBox();
+            SetConnecteBoardsComboBox();
 
             // get the installed list 
             GetInstalledBoardsList();
@@ -122,7 +120,7 @@ namespace Kbg.NppPluginNET
             var boards = js.Deserialize<BoardsRoot>(getBoardResult);
             if (boards != null && boards.Ports != null && boards.Ports.Any())
             {
-                InstalledBoards.AddRange(boards.Ports);
+                ConnectedBoards.AddRange(boards.Ports);
             } //end if 
         } //end private void GetConnectedBoardsList
 
@@ -143,7 +141,7 @@ namespace Kbg.NppPluginNET
             {
                 InstalledBoards.AddRange(boards.Boards);
             }// end if 
-
+            
             // sort list by FQBN
             InstalledBoards.Sort((x, y) => x.FQBN.CompareTo(y.FQBN));
 
@@ -250,10 +248,10 @@ namespace Kbg.NppPluginNET
             else
             {
                 // if board have FQBN
-                if (ConnectedBoards[selectComboIndex].boards.FQBN != "-1")
+                if (ConnectedBoards[selectComboIndex].boards[0].FQBN != "-1")
                 {
                     // find it on the list
-                    int getBoardID = getInstalledBoardID_ByFQBN(ConnectedBoards[selectComboIndex].boards.FQBN);
+                    int getBoardID = getInstalledBoardID_ByFQBN(ConnectedBoards[selectComboIndex].boards[0].FQBN);
                     // if found 
                     if (getBoardID != -1)
                         // select in the list
@@ -311,9 +309,9 @@ namespace Kbg.NppPluginNET
             {
                 string boardDisply = ConnectedBoard.address;
                 // only if we know the type 
-                if (ConnectedBoard.boards.FQBN != "-1")
+                if (ConnectedBoard.boards[0].FQBN != "-1")
                 {
-                    boardDisply += " - " + ConnectedBoard.boards.name;
+                    boardDisply += " - " + ConnectedBoard.boards[0].name;
                 } //end if 
 
                 comboBox1.Items.Add(boardDisply);
