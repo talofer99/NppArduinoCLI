@@ -12,6 +12,9 @@ namespace Kbg.NppPluginNET
     {
         public List<Board> Boards { get; set; }
         public List<Port> Ports { get; set; }
+        public BoardDetail BoardDetails { get; set; }
+        //public List<Config_Option> Config_Options { get; set; }
+
     }
     
     public class Board
@@ -29,6 +32,20 @@ namespace Kbg.NppPluginNET
         public List<Board> boards { get; set; }
     }
 
+    public class Config_Option
+    {
+        public string option { get; set; }
+        public string option_label { get; set; }
+        public List<BoardDetail> values { get; set; }
+    }
+
+
+    public class BoardDetail
+    {
+        public string name { get; set; }
+        public List<string> config_options { get; set; } // List<Config_Option>
+        public string required_tools { get; set; }
+    }
 
     public partial class frmMyDlg : Form
     {
@@ -59,8 +76,18 @@ namespace Kbg.NppPluginNET
         private void SetBoardConfig(int index)
         {
             // now lest check othe boards properties
-            string getBoardResult = RunCLICommand("board details " + InstalledBoards[index].FQBN);
-            RichTextBox1.Text = getBoardResult;
+            string getBoardDetails = RunCLICommand("board details " + InstalledBoards[index].FQBN);
+            RichTextBox1.Text = getBoardDetails;
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            var details = js.Deserialize<BoardsRoot>(getBoardDetails);
+
+            if (details != null && details.BoardDetails != null)  // && details.BoardDetails.config_options != null
+            {
+                RichTextBox1.Text = details.BoardDetails.ToString();
+            }// end if 
+
+
 
 
         } //end private void SetBoardConfig
@@ -284,7 +311,7 @@ namespace Kbg.NppPluginNET
                 if (comboBox1.SelectedIndex != -1)
                     button3.Enabled = true;
                 // set the board cofig in the UI
-                //SetBoardConfig(selectComboIndex);
+                SetBoardConfig(comboBox2.SelectedIndex);
 
             } //end if 
         } //end private void comboBox2_SelectedIndexChanged
