@@ -1,6 +1,14 @@
 Code by: Tal Ofer (talofer99@hotmail.com) 
 And thanks for the help of Tomer Zalach (tomer@katzr.net)
 
+UPDATE (April 18th 2020) - I fixed the major bug and now the plugin is workign again.
+a chnage in the json format of the cli output was changed.
+As for the CLI 0.5.0 Commit: 3be2287 the code i working again.
+I started to work on some other stuff, so some output is done via the text box.
+Still the major functions work.
+
+
+
 
 This is a plugin that allows you to upload code (only saved .ino files) to arduino
 It uses the Arduino-CLI 4 (only) in order to do so, and you got to have the cli on your PATH.
