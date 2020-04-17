@@ -13,10 +13,12 @@ namespace Kbg.NppPluginNET
         public List<Board> Boards { get; set; }
         public List<Port> Ports { get; set; }
         public BoardDetail BoardDetails { get; set; }
+
         //public List<Config_Option> Config_Options { get; set; }
 
     }
-    
+
+
     public class Board
     {
         public string name { get; set; }
@@ -86,7 +88,7 @@ namespace Kbg.NppPluginNET
             {
                 RichTextBox1.Text = details.BoardDetails.ToString();
             }// end if 
-
+        
 
 
 
@@ -139,16 +141,21 @@ namespace Kbg.NppPluginNET
         {
             // get board list
             string getBoardResult = RunCLICommand("board list");
-
+            
+           
             // clear the list 
             ConnectedBoards.Clear();
-            RichTextBox1.Text = getBoardResult;
+            //RichTextBox1.Text = getBoardResult;
             JavaScriptSerializer js = new JavaScriptSerializer();
-            var boards = js.Deserialize<BoardsRoot>(getBoardResult);
+            var boards = js.Deserialize<BoardsRoot>("{ \"Ports\" : " + getBoardResult + "}"); //\"connectedBoards\" : 
+
+
             if (boards != null && boards.Ports != null && boards.Ports.Any())
             {
                 ConnectedBoards.AddRange(boards.Ports);
             } //end if 
+           
+            
         } //end private void GetConnectedBoardsList
 
 
