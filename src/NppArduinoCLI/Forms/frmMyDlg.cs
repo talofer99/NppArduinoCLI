@@ -155,8 +155,13 @@ namespace Kbg.NppPluginNET
             int dropDownIndex = comboBox2.SelectedIndex;
             // get the right board 
             Board CompileBoard = InstalledBoards[dropDownIndex];
+            // get extra combo3 info
+            string selectedBoardExtra = (string)comboBox3.SelectedItem;
+            if (selectedBoardExtra.Length > 0)
+                selectedBoardExtra = ":" + selectedBoardExtra;
+
             // now lets create the CLI command 
-            string CLICommand = "compile -b " + CompileBoard.FQBN + " " + targetINOPath;
+            string CLICommand = "compile -b " + CompileBoard.FQBN + selectedBoardExtra + " " + targetINOPath;
             // run it           
             string compiledResult = RunCLICommand(CLICommand);
             //set the result out
