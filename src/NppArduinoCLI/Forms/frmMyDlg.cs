@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
+using System.Configuration;
+using System.ComponentModel;
 
 namespace Kbg.NppPluginNET
 {
@@ -13,8 +15,8 @@ namespace Kbg.NppPluginNET
         public List<Board> Boards { get; set; }
         public List<Port> Ports { get; set; }
         public BoardDetail BoardDetails { get; set; }
-
-        //public List<Config_Option> Config_Options { get; set; }
+        public List<Config_Option> Config_Options { get; set; }
+        public List<Config_Options_Value> Config_Options_Values { get; set; }
 
     }
 
@@ -31,6 +33,7 @@ namespace Kbg.NppPluginNET
         public string address { get; set; }
         public string protocol { get; set; }
         public string protocol_label { get; set; }
+        [DefaultValue(null)]
         public List<Board> boards { get; set; }
     }
 
@@ -38,9 +41,18 @@ namespace Kbg.NppPluginNET
     {
         public string option { get; set; }
         public string option_label { get; set; }
-        public List<BoardDetail> values { get; set; }
+        [DefaultValue(null)]
+        public List<Config_Options_Value> values { get; set; }
     }
 
+    public class Config_Options_Value
+    {
+        public string value { get; set; }
+        public string value_label { get; set; }
+        [DefaultValue(false)]
+        public Boolean selected { get; set; }
+
+    }
 
     public class BoardDetail
     {
@@ -79,14 +91,24 @@ namespace Kbg.NppPluginNET
         {
             // now lest check othe boards properties
             string getBoardDetails = RunCLICommand("board details " + InstalledBoards[index].FQBN);
-            RichTextBox1.Text = getBoardDetails;
+            //RichTextBox1.Text = getBoardDetails;
 
             JavaScriptSerializer js = new JavaScriptSerializer();
             var details = js.Deserialize<BoardsRoot>(getBoardDetails);
 
-            if (details != null && details.BoardDetails != null)  // && details.BoardDetails.config_options != null
+            // clear extra
+            comboBox3.Items.Clear();
+            comboBox3.ResetText();
+            if (details != null && details.Config_Options != null)  // && details.BoardDetails.config_options != null
             {
-                RichTextBox1.Text = details.BoardDetails.ToString();
+                Config_Option configOptionItem = details.Config_Options[0];
+                foreach (Config_Options_Value configOptionValueItem in configOptionItem.values)
+                {
+                    comboBox3.Items.Add(configOptionItem.option + "=" + configOptionValueItem.value);
+                    if (configOptionValueItem.selected)
+                        comboBox3.Text = configOptionItem.option + "=" + configOptionValueItem.value;
+
+                }
             }// end if 
         
 
@@ -107,8 +129,15 @@ namespace Kbg.NppPluginNET
             string selectedBoard = (string)comboBox1.SelectedItem;
             // get the right board 
             Port runOnThisBoard = getConnectedBoard_ByName(selectedBoard);
+            // get extra combo3 info
+            string selectedBoardExtra = (string)comboBox3.SelectedItem;
+            if (selectedBoardExtra.Length > 0)
+                selectedBoardExtra = ":" + selectedBoardExtra;
+
+
+
             // now lets create the CLI command 
-            string CLICommand = "upload  -b " + CompileBoard.FQBN + " -p " + runOnThisBoard.address + " " + targetINOPath;
+            string CLICommand = "upload  -b " + CompileBoard.FQBN + selectedBoardExtra + " -p " + runOnThisBoard.address + " " + targetINOPath;
 
             // run it           
             string uploadResult = RunCLICommand(CLICommand);
@@ -282,7 +311,7 @@ namespace Kbg.NppPluginNET
             else
             {
                 // if board have FQBN
-                if (ConnectedBoards[selectComboIndex].boards[0].FQBN != "-1")
+                if (ConnectedBoards[selectComboIndex].boards != null && ConnectedBoards[selectComboIndex].boards[0].FQBN != "-1")
                 {
                     // find it on the list
                     int getBoardID = getInstalledBoardID_ByFQBN(ConnectedBoards[selectComboIndex].boards[0].FQBN);
@@ -343,7 +372,7 @@ namespace Kbg.NppPluginNET
             {
                 string boardDisply = ConnectedBoard.address;
                 // only if we know the type 
-                if (ConnectedBoard.boards[0].FQBN != "-1")
+                if (ConnectedBoard.boards != null && ConnectedBoard.boards[0].FQBN != "-1")
                 {
                     boardDisply += " - " + ConnectedBoard.boards[0].name;
                 } //end if 

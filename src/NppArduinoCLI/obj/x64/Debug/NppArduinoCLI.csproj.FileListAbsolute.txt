@@ -16,11 +16,11 @@ C:\Users\Tomer\Downloads\code-20190810T130629Z-001\code\NppArduinoCLI\NppArduino
 C:\Users\Tomer\Downloads\code-20190810T130629Z-001\code\NppArduinoCLI\NppArduinoCLI\obj\x64\Debug\NppArduinoCLI.pdb
 C:\Users\Tomer\Downloads\code-20190810T130629Z-001\code\NppArduinoCLI\NppArduinoCLI\obj\x64\Debug\Kbg.NppPluginNET.BoardsRoot.resources
 C:\Users\talof\source\repos\NppArduinoCLI\NppArduinoCLI\obj\x64\Debug\Kbg.NppPluginNET.BoardsRoot.resources
+C:\dataOnC\Projects\NppArduinoCLI\src\NppArduinoCLI\obj\x64\Debug\NppArduinoCLI.csproj.GenerateResource.cache
+C:\dataOnC\Projects\NppArduinoCLI\src\NppArduinoCLI\obj\x64\Debug\NppArduinoCLI.pdb
 C:\dataOnC\Projects\NppArduinoCLI\src\NppArduinoCLI\bin\Debug-x64\NppArduinoCLI.dll
 C:\dataOnC\Projects\NppArduinoCLI\src\NppArduinoCLI\bin\Debug-x64\NppArduinoCLI.pdb
 C:\dataOnC\Projects\NppArduinoCLI\src\NppArduinoCLI\obj\x64\Debug\Kbg.NppPluginNET.BoardsRoot.resources
 C:\dataOnC\Projects\NppArduinoCLI\src\NppArduinoCLI\obj\x64\Debug\NppArduinoCLI.Properties.Resources.resources
-C:\dataOnC\Projects\NppArduinoCLI\src\NppArduinoCLI\obj\x64\Debug\NppArduinoCLI.csproj.GenerateResource.cache
 C:\dataOnC\Projects\NppArduinoCLI\src\NppArduinoCLI\obj\x64\Debug\NppArduinoCLI.csproj.CoreCompileInputs.cache
 C:\dataOnC\Projects\NppArduinoCLI\src\NppArduinoCLI\obj\x64\Debug\NppArduinoCLI.dll
-C:\dataOnC\Projects\NppArduinoCLI\src\NppArduinoCLI\obj\x64\Debug\NppArduinoCLI.pdb
