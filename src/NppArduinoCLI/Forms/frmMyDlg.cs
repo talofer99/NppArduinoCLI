@@ -96,19 +96,50 @@ namespace Kbg.NppPluginNET
             JavaScriptSerializer js = new JavaScriptSerializer();
             var details = js.Deserialize<BoardsRoot>(getBoardDetails);
 
-            // clear extra
-            comboBox3.Items.Clear();
-            comboBox3.ResetText();
+            //clear extra drop down
+            foreach (Control c in Controls) // you can change cntrls.Controls to your container or if its the form that holds the combobox then use this.Controls
+            {
+                RichTextBox1.Text += c.Name + "\n";
+                if (c is ComboBox) // check if control is checkbox
+                {
+                    if (c.Name != "comboBox1" && c.Name != "comboBox2")
+                    {
+                        Controls.Remove(c);
+                    }
+                } // end if 
+            } //end each
+            ResumeLayout(true);
+            PerformLayout();
+
             if (details != null && details.Config_Options != null)  // && details.BoardDetails.config_options != null
             {
-                Config_Option configOptionItem = details.Config_Options[0];
-                foreach (Config_Options_Value configOptionValueItem in configOptionItem.values)
+                int counter = 0;
+                foreach (Config_Option configOptionItem in details.Config_Options)
                 {
-                    comboBox3.Items.Add(configOptionItem.option + "=" + configOptionValueItem.value);
-                    if (configOptionValueItem.selected)
-                        comboBox3.Text = configOptionItem.option + "=" + configOptionValueItem.value;
+                    ComboBox myNewComboBox = new ComboBox
+                    {
+                        FormattingEnabled = true,
+                        Location = new System.Drawing.Point(12, 270 + (counter * 25)),
+                        Name = configOptionItem.option.ToString(),
+                        Size = new System.Drawing.Size(200, 21)
+                    };
+                    
+                    foreach (Config_Options_Value configOptionValueItem in configOptionItem.values)
+                    {
+                        myNewComboBox.Items.Add(configOptionItem.option + "=" + configOptionValueItem.value);
+                        if (configOptionValueItem.selected) { 
+                            myNewComboBox.Text = configOptionItem.option + "=" + configOptionValueItem.value;
+                        }
+                    } //end for each
+                    // mpve counter 
 
-                }
+                    Controls.Add(myNewComboBox);
+                    counter++;
+                }//end for each
+
+                ResumeLayout(false);
+                PerformLayout();
+
             }// end if 
         
 
@@ -116,6 +147,32 @@ namespace Kbg.NppPluginNET
 
         } //end private void SetBoardConfig
 
+
+        private String getExtraBoardOptions()
+        {
+            String returnResult = "";
+            string selectedBoardExtraControlValue = "";
+            //clear extra drop down
+            foreach (Control c in Controls) // you can change cntrls.Controls to your container or if its the form that holds the combobox then use this.Controls
+            {
+                if (c is ComboBox) // check if control is checkbox
+                {
+                    ComboBox tempComboBox = (ComboBox)c;
+                    if (tempComboBox.Name != "comboBox1" && tempComboBox.Name != "comboBox2")
+                    {
+                        selectedBoardExtraControlValue = (string)tempComboBox.SelectedItem;
+                        if (selectedBoardExtraControlValue.Length > 0 && returnResult.Length > 0) 
+                            selectedBoardExtraControlValue = "," + selectedBoardExtraControlValue;
+                        
+                    }
+                } // end if 
+                returnResult += selectedBoardExtraControlValue;
+            } //end each
+            if (returnResult.Length > 0)
+                returnResult = ":" + returnResult;
+
+            return returnResult;
+        }
 
         // CLI UPLOAD PROCESS
         private Boolean uploadSketch(string targetINOPath)
@@ -129,13 +186,9 @@ namespace Kbg.NppPluginNET
             string selectedBoard = (string)comboBox1.SelectedItem;
             // get the right board 
             Port runOnThisBoard = getConnectedBoard_ByName(selectedBoard);
-            // get extra combo3 info
-            string selectedBoardExtra = (string)comboBox3.SelectedItem;
-            if (selectedBoardExtra.Length > 0)
-                selectedBoardExtra = ":" + selectedBoardExtra;
-
-
-
+            // get extra combo info
+            string selectedBoardExtra = getExtraBoardOptions();
+            
             // now lets create the CLI command 
             string CLICommand = "upload  -b " + CompileBoard.FQBN + selectedBoardExtra + " -p " + runOnThisBoard.address + " " + targetINOPath;
 
@@ -156,9 +209,7 @@ namespace Kbg.NppPluginNET
             // get the right board 
             Board CompileBoard = InstalledBoards[dropDownIndex];
             // get extra combo3 info
-            string selectedBoardExtra = (string)comboBox3.SelectedItem;
-            if (selectedBoardExtra.Length > 0)
-                selectedBoardExtra = ":" + selectedBoardExtra;
+            string selectedBoardExtra = getExtraBoardOptions();
 
             // now lets create the CLI command 
             string CLICommand = "compile -b " + CompileBoard.FQBN + selectedBoardExtra + " " + targetINOPath;
